@@ -16,27 +16,37 @@ export function useIsMobile() {
     setTouchDevice(isTouchDevice);
     
     // Check screen size
-    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
+    const checkSize = () => {
+      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+    };
     
-    const onChange = () => {
-      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    }
+    // Initial check
+    checkSize();
+    
+    // Set up listeners for changes
+    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
     
     // Modern API
-    mql.addEventListener("change", onChange)
-    
-    // Set initial value
-    setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
+    if (mql.addEventListener) {
+      mql.addEventListener("change", checkSize);
+    } else {
+      // Fallback for older browsers
+      window.addEventListener('resize', checkSize);
+    }
     
     // Handle orientation changes on mobile
-    window.addEventListener('orientationchange', onChange)
+    window.addEventListener('orientationchange', checkSize);
     
     return () => {
-      mql.removeEventListener("change", onChange)
-      window.removeEventListener('orientationchange', onChange)
+      if (mql.removeEventListener) {
+        mql.removeEventListener("change", checkSize);
+      } else {
+        window.removeEventListener('resize', checkSize);
+      }
+      window.removeEventListener('orientationchange', checkSize);
     }
-  }, [])
+  }, []);
 
   // Consider device as mobile if either screen size is small or it's a touch device
-  return !!isMobile || touchDevice
+  return !!isMobile || touchDevice;
 }

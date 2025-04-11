@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Maximize, Pause, Play, Volume2, VolumeX, RefreshCw, MonitorSmartphone } from 'lucide-react';
 import BettingOdds from './BettingOdds';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useToast } from '@/hooks/use-toast';
 
 interface VideoPlayerProps {
   matchId: string;
@@ -21,8 +22,10 @@ const VideoPlayer = ({ matchId, matchTitle, streamUrl }: VideoPlayerProps) => {
   const [streamError, setStreamError] = useState(false);
   const [streamSource, setStreamSource] = useState<StreamSource>('iframe');
   const [autoUpdateEnabled, setAutoUpdateEnabled] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
   const videoRef = useRef<HTMLVideoElement>(null);
   const isMobile = useIsMobile();
+  const { toast } = useToast();
   
   // This would be configurable in admin panel
   const bettingOddsPosition = isMobile ? 'bottom-right' : 'bottom-right';
@@ -48,10 +51,20 @@ const VideoPlayer = ({ matchId, matchTitle, streamUrl }: VideoPlayerProps) => {
     const updateInterval = setInterval(() => {
       console.log("Checking for match updates...");
       // In a real app, this would make an API call to check for updates
+      setLastUpdated(new Date());
+      
+      // Notify user of update (occasionally)
+      if (Math.random() > 0.7) {
+        toast({
+          title: "שידור עודכן",
+          description: "המידע החי מתעדכן בזמן אמת",
+          duration: 3000,
+        });
+      }
     }, 30000); // Check every 30 seconds
     
     return () => clearInterval(updateInterval);
-  }, [autoUpdateEnabled]);
+  }, [autoUpdateEnabled, toast]);
   
   // Handle playback controls
   const togglePlay = () => {
@@ -73,9 +86,14 @@ const VideoPlayer = ({ matchId, matchTitle, streamUrl }: VideoPlayerProps) => {
   };
   
   const handleFullscreen = () => {
-    if (videoRef.current) {
-      if (videoRef.current.requestFullscreen) {
-        videoRef.current.requestFullscreen();
+    const container = document.querySelector('.video-container');
+    if (container) {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        container.requestFullscreen().catch(err => {
+          console.error(`Error attempting to enable fullscreen: ${err.message}`);
+        });
       }
     }
   };
@@ -83,10 +101,18 @@ const VideoPlayer = ({ matchId, matchTitle, streamUrl }: VideoPlayerProps) => {
   const handleRetry = () => {
     setStreamError(false);
     // Add logic to retry loading the stream
+    toast({
+      title: "מנסה להתחבר מחדש",
+      description: "מנסה לטעון את השידור מחדש",
+    });
   };
   
   const toggleAutoUpdate = () => {
     setAutoUpdateEnabled(!autoUpdateEnabled);
+    toast({
+      title: !autoUpdateEnabled ? "עדכון אוטומטי מופעל" : "עדכון אוטומטי כבוי",
+      description: !autoUpdateEnabled ? "המידע יתעדכן אוטומטית" : "המידע לא יתעדכן אוטומטית",
+    });
   };
   
   // Simulating adBlock detection - in a real implementation this would be more sophisticated
@@ -99,13 +125,37 @@ const VideoPlayer = ({ matchId, matchTitle, streamUrl }: VideoPlayerProps) => {
       }
     }, 3000);
   }, []);
+
+  // Handle touch events better on mobile
+  useEffect(() => {
+    if (isMobile) {
+      const container = document.querySelector('.video-container');
+      
+      const handleTouchStart = () => {
+        setShowControls(true);
+      };
+      
+      const handleTouchEnd = () => {
+        // Delay hiding controls to allow for interaction
+        setTimeout(() => setShowControls(false), 3000);
+      };
+      
+      if (container) {
+        container.addEventListener('touchstart', handleTouchStart);
+        container.addEventListener('touchend', handleTouchEnd);
+        
+        return () => {
+          container.removeEventListener('touchstart', handleTouchStart);
+          container.removeEventListener('touchend', handleTouchEnd);
+        };
+      }
+    }
+  }, [isMobile]);
   
   return (
-    <div className="relative video-container" 
+    <div className="relative video-container rounded-lg overflow-hidden" 
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => !isMobile && setShowControls(false)}
-      onTouchStart={() => setShowControls(true)}
-      onTouchEnd={() => setTimeout(() => setShowControls(false), 3000)}
     >
       {adBlockDetected ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black p-4 z-10">

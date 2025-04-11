@@ -37,11 +37,11 @@ const MatchCard = ({
   const isMobile = useIsMobile();
   
   return (
-    <Link to={`/match/${id}`}>
-      <div className={`${isLive ? "match-card-live" : "match-card"} hover:shadow-md transition-all duration-300 hover:translate-y-[-2px]`}>
+    <Link to={`/match/${id}`} className="block">
+      <div className={`${isLive ? "match-card-live" : "match-card"} hover:shadow-md transition-all duration-300 hover:translate-y-[-2px] rounded-lg border border-border bg-card p-3 md:p-4`}>
         <div className="flex justify-between items-start mb-2">
           <div className="flex items-center gap-1.5">
-            <span className={`${sportType === 'soccer' ? 'soccer-badge' : 'basketball-badge'} flex items-center text-[10px] md:text-xs`}>
+            <span className={`${sportType === 'soccer' ? 'soccer-badge' : 'basketball-badge'} flex items-center text-[10px] md:text-xs px-1.5 py-0.5 rounded-full ${sportType === 'soccer' ? 'bg-blue-100 text-blue-800' : 'bg-orange-100 text-orange-800'}`}>
               {sportType === 'soccer' ? (
                 <Activity className="h-3 w-3 inline-block ml-1" />
               ) : (
@@ -54,8 +54,8 @@ const MatchCard = ({
             </span>
           </div>
           {isLive ? (
-            <span className="live-badge flex items-center gap-1 text-[10px] md:text-xs">
-              <span className="h-1.5 w-1.5 md:h-2 md:w-2 bg-white rounded-full animate-pulse"></span>
+            <span className="live-badge flex items-center gap-1 text-[10px] md:text-xs px-1.5 py-0.5 rounded-full bg-red-100 text-red-800">
+              <span className="h-1.5 w-1.5 md:h-2 md:w-2 bg-red-500 rounded-full animate-pulse"></span>
               שידור חי
             </span>
           ) : (
