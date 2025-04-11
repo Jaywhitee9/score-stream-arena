@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { 
   CalendarIcon, 
   ClockIcon,
-  Ball,
-  Dumbbell,
+  Football,
+  BadmintonIcon,
 } from 'lucide-react';
 
 export interface MatchProps {
@@ -41,9 +41,9 @@ const MatchCard = ({
           <div className="flex items-center gap-2">
             <span className={sportType === 'soccer' ? 'soccer-badge' : 'basketball-badge'}>
               {sportType === 'soccer' ? (
-                <Ball className="h-3 w-3 inline-block ml-1" />
+                <Football className="h-3 w-3 inline-block ml-1" />
               ) : (
-                <Dumbbell className="h-3 w-3 inline-block ml-1" />
+                <BadmintonIcon className="h-3 w-3 inline-block ml-1" />
               )}
               {sportType === 'soccer' ? 'כדורגל' : 'כדורסל'}
             </span>

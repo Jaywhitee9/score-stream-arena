@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { 
-  Ball, 
-  Dumbbell, 
+  Football, 
+  BadmintonIcon, 
   Search, 
   Menu, 
   X, 
@@ -30,8 +30,8 @@ const Navbar = () => {
         <div className="flex items-center gap-2">
           <Link to="/" className="flex items-center gap-2">
             <div className="relative h-8 w-8 overflow-hidden bg-primary rounded-full flex items-center justify-center">
-              <Ball className="h-5 w-5 text-white absolute" style={{ right: '2px' }} />
-              <Dumbbell className="h-5 w-5 text-white absolute" style={{ left: '2px' }} />
+              <Football className="h-5 w-5 text-white absolute" style={{ right: '2px' }} />
+              <BadmintonIcon className="h-5 w-5 text-white absolute" style={{ left: '2px' }} />
             </div>
             <span className="text-xl font-bold hidden md:inline-block">
               {isHebrew ? 'ספורט סטרים' : 'SportStream'}
