@@ -6,6 +6,7 @@ import {
   Activity,
   Dumbbell,
 } from 'lucide-react';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export interface MatchProps {
   id: string;
@@ -33,13 +34,14 @@ const MatchCard = ({
   awayLogo
 }: MatchProps) => {
   const isLive = status === 'live';
+  const isMobile = useIsMobile();
   
   return (
     <Link to={`/match/${id}`}>
       <div className={`${isLive ? "match-card-live" : "match-card"} hover:shadow-md transition-all duration-300 hover:translate-y-[-2px]`}>
-        <div className="flex justify-between items-start mb-3">
-          <div className="flex items-center gap-2">
-            <span className={`${sportType === 'soccer' ? 'soccer-badge' : 'basketball-badge'} flex items-center`}>
+        <div className="flex justify-between items-start mb-2">
+          <div className="flex items-center gap-1.5">
+            <span className={`${sportType === 'soccer' ? 'soccer-badge' : 'basketball-badge'} flex items-center text-[10px] md:text-xs`}>
               {sportType === 'soccer' ? (
                 <Activity className="h-3 w-3 inline-block ml-1" />
               ) : (
@@ -47,45 +49,45 @@ const MatchCard = ({
               )}
               {sportType === 'soccer' ? 'כדורגל' : 'כדורסל'}
             </span>
-            <span className="text-xs text-muted-foreground truncate max-w-32">
+            <span className="text-[10px] md:text-xs text-muted-foreground truncate max-w-24 md:max-w-32">
               {league}
             </span>
           </div>
           {isLive ? (
-            <span className="live-badge flex items-center gap-1">
-              <span className="h-2 w-2 bg-white rounded-full animate-pulse"></span>
+            <span className="live-badge flex items-center gap-1 text-[10px] md:text-xs">
+              <span className="h-1.5 w-1.5 md:h-2 md:w-2 bg-white rounded-full animate-pulse"></span>
               שידור חי
             </span>
           ) : (
-            <div className="flex items-center text-xs text-muted-foreground">
-              <CalendarIcon className="h-3 w-3 ml-1" />
+            <div className="flex items-center text-[10px] md:text-xs text-muted-foreground">
+              <CalendarIcon className="h-2.5 w-2.5 md:h-3 md:w-3 ml-1" />
               {date}
-              <ClockIcon className="h-3 w-3 mr-2 ml-1" />
+              <ClockIcon className="h-2.5 w-2.5 md:h-3 md:w-3 mr-1.5 ml-1" />
               {time}
             </div>
           )}
         </div>
         
-        <div className="flex justify-between items-center py-3">
-          <div className="flex items-center gap-2">
+        <div className="flex justify-between items-center py-2 md:py-3">
+          <div className="flex items-center gap-1.5 md:gap-2">
             {homeLogo ? (
-              <img src={homeLogo} alt={homeTeam} className="w-8 h-8 object-contain" />
+              <img src={homeLogo} alt={homeTeam} className="w-6 h-6 md:w-8 md:h-8 object-contain" />
             ) : (
-              <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-xs font-bold">
+              <div className="w-6 h-6 md:w-8 md:h-8 bg-muted rounded-full flex items-center justify-center text-[10px] md:text-xs font-bold">
                 {homeTeam.substring(0, 2)}
               </div>
             )}
-            <span className="font-medium">{homeTeam}</span>
+            <span className="text-sm md:text-base font-medium truncate max-w-20 md:max-w-none">{homeTeam}</span>
           </div>
-          <span className="px-2 py-1 rounded-md bg-background/50 text-sm font-bold">
+          <span className="px-1.5 py-0.5 md:px-2 md:py-1 rounded-md bg-background/50 text-xs md:text-sm font-bold">
             VS
           </span>
-          <div className="flex items-center gap-2">
-            <span className="font-medium">{awayTeam}</span>
+          <div className="flex items-center gap-1.5 md:gap-2">
+            <span className="text-sm md:text-base font-medium truncate max-w-20 md:max-w-none">{awayTeam}</span>
             {awayLogo ? (
-              <img src={awayLogo} alt={awayTeam} className="w-8 h-8 object-contain" />
+              <img src={awayLogo} alt={awayTeam} className="w-6 h-6 md:w-8 md:h-8 object-contain" />
             ) : (
-              <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center text-xs font-bold">
+              <div className="w-6 h-6 md:w-8 md:h-8 bg-muted rounded-full flex items-center justify-center text-[10px] md:text-xs font-bold">
                 {awayTeam.substring(0, 2)}
               </div>
             )}

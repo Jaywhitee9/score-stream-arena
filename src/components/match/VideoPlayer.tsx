@@ -1,8 +1,9 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Maximize, Pause, Play, Volume2, VolumeX, RefreshCw } from 'lucide-react';
+import { Maximize, Pause, Play, Volume2, VolumeX, RefreshCw, MonitorSmartphone } from 'lucide-react';
 import BettingOdds from './BettingOdds';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface VideoPlayerProps {
   matchId: string;
@@ -19,10 +20,12 @@ const VideoPlayer = ({ matchId, matchTitle, streamUrl }: VideoPlayerProps) => {
   const [adBlockDetected, setAdBlockDetected] = useState(false);
   const [streamError, setStreamError] = useState(false);
   const [streamSource, setStreamSource] = useState<StreamSource>('iframe');
+  const [autoUpdateEnabled, setAutoUpdateEnabled] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const isMobile = useIsMobile();
   
   // This would be configurable in admin panel
-  const bettingOddsPosition = 'bottom-right';
+  const bettingOddsPosition = isMobile ? 'bottom-right' : 'bottom-right';
   
   // Determine stream source based on URL
   useEffect(() => {
@@ -36,6 +39,19 @@ const VideoPlayer = ({ matchId, matchTitle, streamUrl }: VideoPlayerProps) => {
       setStreamSource('custom');
     }
   }, [streamUrl]);
+  
+  // Auto-update simulation - in a real app, this would connect to a websocket or polling mechanism
+  useEffect(() => {
+    if (!autoUpdateEnabled) return;
+    
+    // Simulate periodic checking for stream updates
+    const updateInterval = setInterval(() => {
+      console.log("Checking for match updates...");
+      // In a real app, this would make an API call to check for updates
+    }, 30000); // Check every 30 seconds
+    
+    return () => clearInterval(updateInterval);
+  }, [autoUpdateEnabled]);
   
   // Handle playback controls
   const togglePlay = () => {
@@ -69,6 +85,10 @@ const VideoPlayer = ({ matchId, matchTitle, streamUrl }: VideoPlayerProps) => {
     // Add logic to retry loading the stream
   };
   
+  const toggleAutoUpdate = () => {
+    setAutoUpdateEnabled(!autoUpdateEnabled);
+  };
+  
   // Simulating adBlock detection - in a real implementation this would be more sophisticated
   useEffect(() => {
     // Mock adblock detection
@@ -83,32 +103,34 @@ const VideoPlayer = ({ matchId, matchTitle, streamUrl }: VideoPlayerProps) => {
   return (
     <div className="relative video-container" 
       onMouseEnter={() => setShowControls(true)}
-      onMouseLeave={() => setShowControls(false)}
+      onMouseLeave={() => !isMobile && setShowControls(false)}
+      onTouchStart={() => setShowControls(true)}
+      onTouchEnd={() => setTimeout(() => setShowControls(false), 3000)}
     >
       {adBlockDetected ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black p-4 z-10">
-          <h3 className="text-xl font-bold text-white mb-4">זיהינו שאתה משתמש בחוסם פרסומות</h3>
-          <p className="text-muted-foreground text-center mb-6">
+          <h3 className="text-lg md:text-xl font-bold text-white mb-3 md:mb-4">זיהינו שאתה משתמש בחוסם פרסומות</h3>
+          <p className="text-muted-foreground text-center text-sm md:text-base mb-4 md:mb-6">
             אנא כבה את חוסם הפרסומות כדי להמשיך לצפות בתוכן ללא תשלום.
           </p>
           <Button 
             variant="default" 
             onClick={() => setAdBlockDetected(false)}
-            className="px-6"
+            className="px-4 md:px-6 text-sm md:text-base"
           >
             כיביתי את חוסם הפרסומות
           </Button>
         </div>
       ) : streamError ? (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/90 p-4 z-10">
-          <h3 className="text-xl font-bold text-white mb-4">שגיאה בטעינת השידור</h3>
-          <p className="text-muted-foreground text-center mb-6">
+          <h3 className="text-lg md:text-xl font-bold text-white mb-3 md:mb-4">שגיאה בטעינת השידור</h3>
+          <p className="text-muted-foreground text-center text-sm md:text-base mb-4 md:mb-6">
             לא הצלחנו לטעון את השידור. נסה שוב או בחר מקור אחר.
           </p>
           <Button 
             variant="default" 
             onClick={handleRetry}
-            className="px-6 flex items-center gap-2"
+            className="px-4 md:px-6 text-sm md:text-base flex items-center gap-2"
           >
             <RefreshCw className="h-4 w-4" />
             נסה שוב
@@ -135,48 +157,67 @@ const VideoPlayer = ({ matchId, matchTitle, streamUrl }: VideoPlayerProps) => {
                 controls={false}
                 poster="/placeholder.svg"
                 onError={() => setStreamError(true)}
+                playsInline // Better mobile experience
               >
                 <source src={streamUrl} type={streamSource === 'hls' ? 'application/x-mpegURL' : 'video/mp4'} />
                 מנגן הוידאו לא נתמך בדפדפן זה.
               </video>
             ) : (
-              <div className="text-white flex flex-col items-center justify-center">
-                <p className="text-xl mb-2">מקור השידור לא זמין כרגע</p>
-                <p className="text-sm text-muted-foreground">אנא נסה שוב מאוחר יותר</p>
+              <div className="text-white flex flex-col items-center justify-center p-4">
+                <p className="text-base md:text-xl mb-2 text-center">מקור השידור לא זמין כרגע</p>
+                <p className="text-xs md:text-sm text-muted-foreground text-center">אנא נסה שוב מאוחר יותר</p>
               </div>
             )}
           </div>
           
-          {/* Custom Video Controls */}
-          {(streamSource === 'hls' || streamSource === 'rtmp' || streamSource === 'custom') && showControls && (
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 flex items-center transition-opacity duration-300">
+          {/* Auto-update indicator */}
+          {autoUpdateEnabled && (
+            <div className="absolute top-2 right-2 bg-black/50 rounded-md px-2 py-1 text-xs text-white flex items-center gap-1 z-20">
+              <span className="h-1.5 w-1.5 bg-accent rounded-full animate-pulse"></span>
+              עדכון אוטומטי פעיל
+            </div>
+          )}
+          
+          {/* Custom Video Controls - always visible on mobile with tap to hide/show */}
+          {(streamSource === 'hls' || streamSource === 'rtmp' || streamSource === 'custom') && 
+            (showControls || isMobile) && (
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-2 md:p-4 flex items-center transition-opacity duration-300 z-10">
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="text-white hover:bg-white/20"
+                className="text-white hover:bg-white/20 h-8 w-8 md:h-10 md:w-10"
                 onClick={togglePlay}
               >
-                {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
+                {isPlaying ? <Pause className="h-4 w-4 md:h-5 md:w-5" /> : <Play className="h-4 w-4 md:h-5 md:w-5" />}
               </Button>
               
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="text-white hover:bg-white/20"
+                className="text-white hover:bg-white/20 h-8 w-8 md:h-10 md:w-10"
                 onClick={toggleMute}
               >
-                {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+                {isMuted ? <VolumeX className="h-4 w-4 md:h-5 md:w-5" /> : <Volume2 className="h-4 w-4 md:h-5 md:w-5" />}
               </Button>
               
               <div className="flex-1" />
               
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-white/20 h-8 w-8 md:h-10 md:w-10"
+                onClick={toggleAutoUpdate}
+              >
+                <MonitorSmartphone className={`h-4 w-4 md:h-5 md:w-5 ${autoUpdateEnabled ? 'text-accent' : 'text-white'}`} />
+              </Button>
+              
               <Button 
                 variant="ghost" 
                 size="icon" 
-                className="text-white hover:bg-white/20"
+                className="text-white hover:bg-white/20 h-8 w-8 md:h-10 md:w-10"
                 onClick={handleFullscreen}
               >
-                <Maximize className="h-5 w-5" />
+                <Maximize className="h-4 w-4 md:h-5 md:w-5" />
               </Button>
             </div>
           )}
