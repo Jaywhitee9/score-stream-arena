@@ -1,68 +1,21 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222 47% 11%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 222 47% 14%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 222 47% 11%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 210 100% 50%;
+    --primary-foreground: 210 40% 98%;
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -70,22 +23,26 @@
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 142 71% 45%;
     --accent-foreground: 210 40% 98%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 62.8% 40.6%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --ring: 210 100% 50%;
+
+    --radius: 0.5rem;
+
+    /* Custom sidebar colors */
+    --sidebar-background: 222 47% 9%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 210 100% 50%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-accent: 222 47% 13%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 222 47% 17%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
@@ -97,5 +54,86 @@
 
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    direction: rtl;
+  }
+}
+
+/* Custom utility classes */
+@layer components {
+  .live-badge {
+    @apply bg-sport-live text-white px-2 py-1 rounded text-xs font-bold animate-pulse-light;
+  }
+  
+  .soon-badge {
+    @apply bg-sport-soon text-white px-2 py-1 rounded text-xs font-bold;
+  }
+  
+  .soccer-badge {
+    @apply bg-sport-soccer text-white px-2 py-1 rounded-md text-xs;
+  }
+  
+  .basketball-badge {
+    @apply bg-sport-basketball text-white px-2 py-1 rounded-md text-xs;
+  }
+  
+  .match-card {
+    @apply bg-card rounded-lg p-4 border border-border hover:border-primary/50 transition-all;
+  }
+  
+  .match-card-live {
+    @apply bg-card rounded-lg p-4 border-2 border-sport-live hover:border-sport-live/80 transition-all;
+  }
+  
+  .navbar {
+    @apply sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border;
+  }
+  
+  .video-container {
+    @apply relative w-full pb-[56.25%] overflow-hidden bg-black rounded-md;
+  }
+  
+  .video-container iframe {
+    @apply absolute top-0 left-0 w-full h-full;
+  }
+  
+  .betting-overlay {
+    @apply absolute bg-black/70 backdrop-blur-sm p-3 rounded-md border border-accent/30 text-white text-sm;
+  }
+  
+  .betting-overlay-top-left {
+    @apply top-4 left-4;
+  }
+  
+  .betting-overlay-top-right {
+    @apply top-4 right-4;
+  }
+  
+  .betting-overlay-bottom-left {
+    @apply bottom-4 left-4;
+  }
+  
+  .betting-overlay-bottom-right {
+    @apply bottom-4 right-4;
+  }
+  
+  .ad-banner {
+    @apply bg-muted rounded-md overflow-hidden flex justify-center items-center my-2;
+  }
+  
+  .ad-banner-header {
+    @apply h-16 md:h-20;
+  }
+  
+  .ad-banner-footer {
+    @apply h-20 md:h-24;
+  }
+  
+  .ad-banner-sidebar {
+    @apply h-80;
+  }
+  
+  .language-selector {
+    @apply flex items-center gap-1 text-sm text-muted-foreground;
   }
 }
