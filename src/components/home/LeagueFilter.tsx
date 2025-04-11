@@ -1,7 +1,7 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Football, BadmintonIcon, Globe, ChevronDown, Search } from 'lucide-react';
+import { Activity, Dumbbell, Globe, ChevronDown, Search } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -124,7 +124,7 @@ const LeagueFilter = ({ onFilterChange }: LeagueFilterProps) => {
           onClick={() => handleTabChange('soccer')}
           className="whitespace-nowrap"
         >
-          <Football className="ml-2 h-4 w-4" />
+          <Activity className="ml-2 h-4 w-4" />
           כדורגל
         </Button>
         <Button
@@ -133,7 +133,7 @@ const LeagueFilter = ({ onFilterChange }: LeagueFilterProps) => {
           onClick={() => handleTabChange('basketball')}
           className="whitespace-nowrap"
         >
-          <BadmintonIcon className="ml-2 h-4 w-4" />
+          <Dumbbell className="ml-2 h-4 w-4" />
           כדורסל
         </Button>
         
@@ -201,9 +201,9 @@ const LeagueFilter = ({ onFilterChange }: LeagueFilterProps) => {
             <Button variant="outline" className="w-full justify-between">
               <span className="flex items-center">
                 {activeTab === 'soccer' ? (
-                  <Football className="ml-2 h-4 w-4" />
+                  <Activity className="ml-2 h-4 w-4" />
                 ) : activeTab === 'basketball' ? (
-                  <BadmintonIcon className="ml-2 h-4 w-4" />
+                  <Dumbbell className="ml-2 h-4 w-4" />
                 ) : (
                   <Search className="ml-2 h-4 w-4" />
                 )}
@@ -228,7 +228,7 @@ const LeagueFilter = ({ onFilterChange }: LeagueFilterProps) => {
               <>
                 {SOCCER_LEAGUES.map(league => (
                   <DropdownMenuItem key={league.id} onClick={() => handleLeagueSelect(league.id)}>
-                    <Football className="ml-2 h-4 w-4" />
+                    <Activity className="ml-2 h-4 w-4" />
                     {league.name}
                     <span className="mr-auto text-xs text-muted-foreground">
                       {league.country}
@@ -242,7 +242,7 @@ const LeagueFilter = ({ onFilterChange }: LeagueFilterProps) => {
               <>
                 {BASKETBALL_LEAGUES.map(league => (
                   <DropdownMenuItem key={league.id} onClick={() => handleLeagueSelect(league.id)}>
-                    <BadmintonIcon className="ml-2 h-4 w-4" />
+                    <Dumbbell className="ml-2 h-4 w-4" />
                     {league.name}
                     <span className="mr-auto text-xs text-muted-foreground">
                       {league.country}

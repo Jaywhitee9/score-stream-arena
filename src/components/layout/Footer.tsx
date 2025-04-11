@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { Football, BadmintonIcon, TrendingUp, Info, Shield } from 'lucide-react';
+import { Activity, Dumbbell, TrendingUp, Info, Shield } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -10,8 +10,8 @@ const Footer = () => {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <div className="relative h-8 w-8 overflow-hidden bg-primary rounded-full flex items-center justify-center">
-                <Football className="h-5 w-5 text-white absolute" style={{ right: '2px' }} />
-                <BadmintonIcon className="h-5 w-5 text-white absolute" style={{ left: '2px' }} />
+                <Activity className="h-5 w-5 text-white absolute" style={{ right: '2px' }} />
+                <Dumbbell className="h-5 w-5 text-white absolute" style={{ left: '2px' }} />
               </div>
               <h3 className="text-xl font-bold">ספורט סטרים</h3>
             </div>
@@ -25,13 +25,13 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link to="/" className="text-muted-foreground hover:text-primary transition-colors text-sm flex items-center gap-2">
-                  <Football className="h-4 w-4" />
+                  <Activity className="h-4 w-4" />
                   כדורגל
                 </Link>
               </li>
               <li>
                 <Link to="/" className="text-muted-foreground hover:text-primary transition-colors text-sm flex items-center gap-2">
-                  <BadmintonIcon className="h-4 w-4" />
+                  <Dumbbell className="h-4 w-4" />
                   כדורסל
                 </Link>
               </li>
