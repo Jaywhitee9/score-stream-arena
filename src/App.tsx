@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import MatchPage from "./pages/MatchPage";
 import AdminDashboard from "./pages/AdminDashboard";
+import ManageStreams from "./pages/admin/ManageStreams";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/match/:id" element={<MatchPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/matches/:id" element={<ManageStreams />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
